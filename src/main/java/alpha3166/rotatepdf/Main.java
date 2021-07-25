@@ -4,9 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
@@ -15,13 +12,14 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
-    Logger logger;
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     public static void main(String... args) throws Exception {
         var self = new Main();
-        self.logger = setupLogger();
         self.execute(args);
     }
 
@@ -83,27 +81,5 @@ public class Main {
         } else {
             Files.delete(newPdfPath);
         }
-    }
-
-    public static Logger setupLogger() {
-        var logger = Logger.getLogger("");
-        for (var handler : logger.getHandlers()) {
-            logger.removeHandler(handler); // Remove default ConsoleHandler
-        }
-        logger.addHandler(new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-                System.out.println(record.getMessage());
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void close() throws SecurityException {
-            }
-        });
-        return logger;
     }
 }

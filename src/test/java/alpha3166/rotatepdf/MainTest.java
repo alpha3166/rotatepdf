@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
+import java.util.List;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
@@ -19,21 +19,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class MainTest {
+	List<String> logs = LogAppender.logs;
     Path base;
     Main sut;
-    LogHandler logHandler;
 
     @BeforeEach
     public void beforeEach() throws Exception {
+        logs.clear();
         base = DataManager.makeTestDir();
         sut = new Main();
-        logHandler = new LogHandler();
-        var logger = Logger.getLogger("");
-        for (var handler : logger.getHandlers()) {
-            logger.removeHandler(handler);
-        }
-        logger.addHandler(logHandler);
-        sut.logger = logger;
     }
 
     @AfterEach
@@ -115,8 +109,8 @@ public class MainTest {
         // Exercise
         sut.execute(base + "/ref.pdf", base + "/target.pdf");
         // Verify
-        assertEquals(1, logHandler.getLogCount());
-        assertEquals(base + "/target.pdf", logHandler.getLog(0));
+        assertEquals(1, logs.size());
+        assertEquals(base + "/target.pdf", logs.get(0));
         try (var resultPdf = new PdfDocument(new PdfReader(base + "/target.pdf"))) {
             assertEquals(0, resultPdf.getPage(1).getRotation());
             assertEquals(90, resultPdf.getPage(2).getRotation());
@@ -133,12 +127,12 @@ public class MainTest {
         // Exercise
         sut.execute(base + "/ref.pdf", base + "/target.pdf");
         // Verify
-        assertEquals(5, logHandler.getLogCount());
-        assertEquals(base + "/target.pdf", logHandler.getLog(0));
-        assertEquals("  p1: 90 -> 0", logHandler.getLog(1));
-        assertEquals("  p2: 180 -> 90", logHandler.getLog(2));
-        assertEquals("  p3: 270 -> 180", logHandler.getLog(3));
-        assertEquals("  p4: 0 -> 270", logHandler.getLog(4));
+        assertEquals(5, logs.size());
+        assertEquals(base + "/target.pdf", logs.get(0));
+        assertEquals("  p1: 90 -> 0", logs.get(1));
+        assertEquals("  p2: 180 -> 90", logs.get(2));
+        assertEquals("  p3: 270 -> 180", logs.get(3));
+        assertEquals("  p4: 0 -> 270", logs.get(4));
         try (var resultPdf = new PdfDocument(new PdfReader(base + "/target.pdf"))) {
             assertEquals(90, resultPdf.getPage(1).getRotation());
             assertEquals(180, resultPdf.getPage(2).getRotation());
@@ -155,8 +149,8 @@ public class MainTest {
         // Exercise
         sut.execute("-f", base + "/ref.pdf", base + "/target.pdf");
         // Verify
-        assertEquals(1, logHandler.getLogCount());
-        assertEquals(base + "/target.pdf", logHandler.getLog(0));
+        assertEquals(1, logs.size());
+        assertEquals(base + "/target.pdf", logs.get(0));
         try (var resultPdf = new PdfDocument(new PdfReader(base + "/target.pdf"))) {
             assertEquals(0, resultPdf.getPage(1).getRotation());
             assertEquals(90, resultPdf.getPage(2).getRotation());
@@ -173,12 +167,12 @@ public class MainTest {
         // Exercise
         sut.execute("-f", base + "/ref.pdf", base + "/target.pdf");
         // Verify
-        assertEquals(5, logHandler.getLogCount());
-        assertEquals(base + "/target.pdf", logHandler.getLog(0));
-        assertEquals("  p1: 90 -> 0", logHandler.getLog(1));
-        assertEquals("  p2: 180 -> 90", logHandler.getLog(2));
-        assertEquals("  p3: 270 -> 180", logHandler.getLog(3));
-        assertEquals("  p4: 0 -> 270", logHandler.getLog(4));
+        assertEquals(5, logs.size());
+        assertEquals(base + "/target.pdf", logs.get(0));
+        assertEquals("  p1: 90 -> 0", logs.get(1));
+        assertEquals("  p2: 180 -> 90", logs.get(2));
+        assertEquals("  p3: 270 -> 180", logs.get(3));
+        assertEquals("  p4: 0 -> 270", logs.get(4));
         try (var resultPdf = new PdfDocument(new PdfReader(base + "/target.pdf"))) {
             assertEquals(0, resultPdf.getPage(1).getRotation());
             assertEquals(90, resultPdf.getPage(2).getRotation());
@@ -197,12 +191,12 @@ public class MainTest {
         // Exercise
         sut.execute("-f", refPdf.toString(), targetPdf.toString());
         // Verify
-        assertEquals(5, logHandler.getLogCount());
-        assertEquals(targetPdf.toString(), logHandler.getLog(0));
-        assertEquals("  p1: 90 -> 0", logHandler.getLog(1));
-        assertEquals("  p2: 180 -> 90", logHandler.getLog(2));
-        assertEquals("  p3: 270 -> 180", logHandler.getLog(3));
-        assertEquals("  p4: 0 -> 270", logHandler.getLog(4));
+        assertEquals(5, logs.size());
+        assertEquals(targetPdf.toString(), logs.get(0));
+        assertEquals("  p1: 90 -> 0", logs.get(1));
+        assertEquals("  p2: 180 -> 90", logs.get(2));
+        assertEquals("  p3: 270 -> 180", logs.get(3));
+        assertEquals("  p4: 0 -> 270", logs.get(4));
         try (var resultPdf = new PdfDocument(new PdfReader(targetPdf.toString()))) {
             assertEquals(0, resultPdf.getPage(1).getRotation());
             assertEquals(90, resultPdf.getPage(2).getRotation());
