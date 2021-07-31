@@ -36,7 +36,3 @@ Git、Java (11以降)、Maven をインストールし、クローン&ビルド�
     git clone https://github.com/alpha3166/rotatepdf
     cd rotatepdf
     mvn package
-
-## DockerでRotatePDFを使うには
-
-[docker/rotatepdf_run](docker/rotatepdf_run)ディレクトリ内の[README.md](docker/rotatepdf_run/README.md)を参照してください。

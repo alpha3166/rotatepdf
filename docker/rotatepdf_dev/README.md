@@ -2,22 +2,20 @@
 
 ## Setup
 
-Replace UID (`1000`) and GID (`1000`) in `Dockerfile` and `docker-compose.yml` to the ones you are using.
+Replace UID (`1000`) and GID (`1000`) in `Dockerfile` and `docker-compose.yml` with yours.
 
-## To test
+## With Docker
 
-    docker-compose run --rm ws mvn test
+To build image:
 
-or
+    docker build -t rotatepdf-dev .
 
-    docker build -t rotatepdf:dev .
-    docker run -it --rm -u $(id -u):$(id -g) -v ~/.m2:/home/me/.m2 -v $PWD/../..:/workspace -w /workspace rotatepdf:dev mvn test
+To start shell:
 
-## To build
+    docker run -it --rm -u $(id -u):$(id -g) -v ~/.m2:/home/me/.m2 -v $PWD/../..:/rotatepdf -w /rotatepdf rotatepdf-dev sh
 
-    docker-compose run --rm ws mvn package
+## With Docker-Compose
 
-or
+To start shell:
 
-    docker build -t rotatepdf:dev .
-    docker run -it --rm -u $(id -u):$(id -g) -v ~/.m2:/home/me/.m2 -v $PWD/../..:/workspace -w /workspace rotatepdf:dev mvn package
+    docker-compose run --rm ws sh

@@ -36,7 +36,3 @@ Install Git, Java (11 or later), and Maven, then clone & build.
     git clone https://github.com/alpha3166/rotatepdf
     cd rotatepdf
     mvn package
-
-## How to use RotatePDF with Docker
-
-See the [README.md](docker/rotatepdf_run/README.md) in [docker/rotatepdf_run](docker/rotatepdf_run) directory.
