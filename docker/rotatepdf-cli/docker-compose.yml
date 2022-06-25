@@ -3,7 +3,7 @@ services:
   ws:
     build:
       context: ../..
-      dockerfile: docker/rotatepdf_cli/Dockerfile
+      dockerfile: docker/rotatepdf-cli/Dockerfile
     image: rotatepdf-cli
     user: 1000:1000
     volumes:
